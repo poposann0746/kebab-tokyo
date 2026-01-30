@@ -5,10 +5,17 @@ on:
   push:
     branches: [ main ]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  RAILS_ENV: test
+  DATABASE_URL: postgres://postgres:postgres@localhost:5432/kebab_tokyo_test
+
 jobs:
   scan_ruby:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -28,7 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RUBOCOP_CACHE_ROOT: tmp/rubocop
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -62,7 +68,11 @@ jobs:
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
-        options: --health-cmd="pg_isready -U postgres" --health-interval=10s --health-timeout=5s --health-retries=5
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - name: Install packages
@@ -77,14 +87,23 @@ jobs:
           bundler-cache: true
 
       - name: Prepare DB and run tests
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/myapp_test
         run: |
+          set -euxo pipefail
           bin/rails db:prepare
           bin/rails test
 
+      - name: Upload test logs (if any)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs
+          path: |
+            log/test.log
+          if-no-files-found: ignore
+
   system-test:
+    # system testの土台が揃った時だけ実行する（今は test/system が無いので自動でskipされる）
+    if: ${{ hashFiles('test/application_system_test_case.rb', 'test/system/**/*_test.rb') != '' }}
     runs-on: ubuntu-latest
 
     services:
@@ -95,11 +114,17 @@ jobs:
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
-        options: --health-cmd="pg_isready -U postgres" --health-interval=10s --health-timeout=5s --health-retries=5
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libpq-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y libpq-dev
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -110,10 +135,8 @@ jobs:
           bundler-cache: true
 
       - name: Prepare DB and run system tests
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/kebab_tokyo_test
         run: |
+          set -euxo pipefail
           bin/rails db:prepare
           bin/rails test:system
 
@@ -122,5 +145,15 @@ jobs:
         if: failure()
         with:
           name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
+          path: |
+            tmp/screenshots
+          if-no-files-found: ignore
+
+      - name: Upload system test logs (if any)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: system-test-logs
+          path: |
+            log/test.log
           if-no-files-found: ignore
