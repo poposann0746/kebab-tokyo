@@ -94,7 +94,7 @@ jobs:
 
       - name: Upload test logs (if any)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: test-logs
           path: |
@@ -141,7 +141,7 @@ jobs:
           bin/rails test:system
 
       - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: failure()
         with:
           name: screenshots
@@ -151,7 +151,7 @@ jobs:
 
       - name: Upload system test logs (if any)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: system-test-logs
           path: |
