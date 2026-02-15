@@ -1,13 +1,17 @@
 require "test_helper"
 
 class ShopsControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @shop = shops(:one)
+  end
+
   test "should get index" do
-    get shops_index_url
+    get shops_url
     assert_response :success
   end
 
   test "should get show" do
-    get shops_show_url
+    get shop_url(@shop)
     assert_response :success
   end
 end
