@@ -23,8 +23,11 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   </head>
 
-  <body class="min-h-screen bg-white text-slate-900">
+  <body class="min-h-screen bg-white text-slate-900 pb-16">
     <%= render "shared/header" %>
-    <%= yield %>
+    <main>
+      <%= yield %>
+    </main>
+    <%= render "shared/bottom_navigation" %>
   </body>
 </html>
