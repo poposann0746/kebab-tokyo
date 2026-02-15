@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "== Waiting for database connection =="
+bundle exec rails db:prepare
+
+echo "== Starting Rails server =="
+exec "$@"
