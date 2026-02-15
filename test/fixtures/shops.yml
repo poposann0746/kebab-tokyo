@@ -5,9 +5,9 @@ one:
   address: MyString
   lat: 1.5
   lng: 1.5
-  image_url1: MyString
-  image_url2: MyString
-  image_url3: MyString
+  image_url1:
+  image_url2:
+  image_url3:
 
 two:
   name: MyString
