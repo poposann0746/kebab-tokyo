@@ -1,0 +1,21 @@
+<h1>店舗一覧</h1>
+
+<% if @shops.any? %>
+  <ul>
+    <% @shops.each do |shop| %>
+      <li style="margin-bottom: 16px;">
+        <strong><%= link_to shop.name, shop_path(shop) %></strong><br>
+        <%= shop.address %><br>
+        <small><%= shop.lat %>, <%= shop.lng %></small><br>
+
+        <% if shop.image_url1.present? %>
+          <%= image_tag shop.image_url1, alt: shop.name, style: "max-width: 240px; height: auto;" %>
+        <% else %>
+          <span style="color: #888;">画像なし</span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>店舗がありません（seedが未投入かも）</p>
+<% end %>
