@@ -1,0 +1,308 @@
+<div class="min-h-screen bg-amber-50 -mt-4 pb-12">
+
+  <!-- ヒーローヘッダー -->
+  <div class="relative overflow-hidden bg-stone-900 px-6 py-10 text-amber-50 text-center shadow-2xl">
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.08%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-30"></div>
+    <div class="relative">
+      <p class="text-5xl mb-3">🥙</p>
+      <h1 class="text-3xl font-black tracking-tight">レビューを投稿</h1>
+      <p class="mt-2 text-amber-200 text-sm font-medium"><%= @shop.name %> への評価</p>
+    </div>
+  </div>
+
+  <%= form_with model: [@shop, @review], class: "mx-auto max-w-lg px-4 -mt-6 relative z-10 space-y-6 pb-6" do |f| %>
+
+    <!-- カテゴリ選択カード -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 border border-stone-200">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-200 text-lg">🍽️</span>
+        <span class="text-lg font-bold text-stone-800">カテゴリ</span>
+      </div>
+      <%= f.hidden_field :category, id: "review_category" %>
+      <div class="flex flex-wrap gap-2">
+        <% [
+          [:kebab_sand, "🥙 ケバブサンド"],
+          [:kebab_wrap, "🌯 ケバブラップ"],
+          [:kebab_rice, "🍚 ケバブライス"],
+          [:other,      "🍽️ その他"]
+        ].each do |value, label| %>
+          <% selected = @review.category == value.to_s %>
+          <button type="button"
+                  id="category_chip_<%= value %>"
+                  onclick="
+                    document.getElementById('review_category').value = '<%= value %>';
+                    document.querySelectorAll('[id^=category_chip_]').forEach(function(el) {
+                      el.className = 'px-4 py-2.5 rounded-full text-sm font-bold border-2 transition-all duration-200 cursor-pointer bg-amber-50 text-amber-900 border-amber-300 hover:border-amber-600';
+                    });
+                    this.className = 'px-4 py-2.5 rounded-full text-sm font-bold border-2 transition-all duration-200 cursor-pointer bg-stone-900 text-amber-50 border-stone-900 shadow-md';
+                  "
+                  class="px-4 py-2.5 rounded-full text-sm font-bold border-2 transition-all duration-200 cursor-pointer
+                         <%= selected ? 'bg-stone-900 text-amber-50 border-stone-900 shadow-md' : 'bg-amber-50 text-amber-900 border-amber-300 hover:border-amber-600' %>">
+            <%= label %>
+          </button>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- 肉の種類選択カード -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 border border-stone-200">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-200 text-lg">🥩</span>
+        <span class="text-lg font-bold text-stone-800">肉の種類</span>
+      </div>
+      <%= f.hidden_field :meat_type, id: "review_meat_type" %>
+      <div class="flex flex-wrap gap-2">
+        <% [
+          [:beef,    "🐄 ビーフ"],
+          [:chicken, "🐔 チキン"],
+          [:mix,     "🍖 ミックス"],
+          [:other,   "🍽️ その他"]
+        ].each do |value, label| %>
+          <% selected = @review.meat_type == value.to_s %>
+          <button type="button"
+                  id="meat_type_chip_<%= value %>"
+                  onclick="
+                    document.getElementById('review_meat_type').value = '<%= value %>';
+                    document.querySelectorAll('[id^=meat_type_chip_]').forEach(function(el) {
+                      el.className = 'px-4 py-2.5 rounded-full text-sm font-bold border-2 transition-all duration-200 cursor-pointer bg-amber-50 text-amber-900 border-amber-300 hover:border-amber-600';
+                    });
+                    this.className = 'px-4 py-2.5 rounded-full text-sm font-bold border-2 transition-all duration-200 cursor-pointer bg-stone-900 text-amber-50 border-stone-900 shadow-md';
+                  "
+                  class="px-4 py-2.5 rounded-full text-sm font-bold border-2 transition-all duration-200 cursor-pointer
+                         <%= selected ? 'bg-stone-900 text-amber-50 border-stone-900 shadow-md' : 'bg-amber-50 text-amber-900 border-amber-300 hover:border-amber-600' %>">
+            <%= label %>
+          </button>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- ソースの種類選択カード -->
+    <div class="bg-white rounded-2xl shadow-lg px-4 py-6 border border-stone-200">
+      <div class="flex items-center gap-2 mb-4 px-1">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-200 text-lg">🫙</span>
+        <span class="text-lg font-bold text-stone-800">ソースの種類</span>
+      </div>
+      <%= f.hidden_field :sauce_type, id: "review_sauce_type" %>
+      <div class="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
+        <% [
+          [:mild,          "😊 マイルド"],
+          [:medium,        "🌶️ ミディアム"],
+          [:hot,           "🔥 ホット"],
+          [:very_hot,      "💀 激辛"],
+          [:yogurt,        "🥛 ヨーグルト"],
+          [:garlic_yogurt, "🧄 ガーリックヨーグルト"],
+          [:teriyaki,      "🍯 テリヤキ"],
+          [:other,         "🍽️ その他"]
+        ].each do |value, label| %>
+          <% selected = @review.sauce_type == value.to_s %>
+          <button type="button"
+                  id="sauce_type_chip_<%= value %>"
+                  onclick="
+                    document.getElementById('review_sauce_type').value = '<%= value %>';
+                    document.querySelectorAll('[id^=sauce_type_chip_]').forEach(function(el) {
+                      el.className = 'min-w-20 px-4 py-1 rounded-xl text-xs font-bold border-2 transition-all duration-200 cursor-pointer bg-amber-50 text-amber-900 border-amber-300 hover:border-amber-600 text-center';
+                    });
+                    this.className = 'min-w-20 px-4 py-1 rounded-xl text-xs font-bold border-2 transition-all duration-200 cursor-pointer bg-stone-900 text-amber-50 border-stone-900 shadow-md text-center';
+                  "
+                  class="min-w-20 px-4 py-1 rounded-xl text-xs font-bold border-2 transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 text-center
+                         <%= selected ? 'bg-stone-900 text-amber-50 border-stone-900 shadow-md' : 'bg-amber-50 text-amber-900 border-amber-300 hover:border-amber-600' %>">
+            <%= label %>
+          </button>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- 5段階評価カード -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 border border-stone-200 space-y-8">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-lg">⭐</span>
+        <h2 class="text-lg font-bold text-stone-800">各項目の評価</h2>
+      </div>
+
+      <% [
+        [:meat_taste,          "肉の味",       "🥩", ["😢", "😐", "🙂", "😋", "🤤"]],
+        [:sauce_taste,         "ソースの味",    "🫙", ["😢", "😐", "🙂", "😋", "🤤"]],
+        [:vegetable_amount,    "野菜の量",      "🥬", ["😢", "😐", "🙂", "😋", "🤤"]],
+        [:bread_compatibility, "パンとの相性",   "🫓", ["😢", "😐", "🙂", "😋", "🤤"]],
+        [:value_for_money,     "価格満足度",    "💰", ["😢", "😐", "🙂", "😋", "🤤"]]
+      ].each do |field, label, icon, emojis| %>
+
+        <% current_value = @review.send(field) || 3 %>
+
+        <div class="group">
+          <div class="flex items-center justify-between mb-3">
+            <label class="flex items-center gap-2 font-bold text-stone-700">
+              <span class="text-xl"><%= icon %></span>
+              <span><%= label %></span>
+            </label>
+            <div class="flex items-center gap-1.5">
+              <span id="<%= field %>_emoji" class="text-2xl transition-all duration-300">
+                <%= emojis[current_value - 1] %>
+              </span>
+              <span id="<%= field %>_value"
+                    class="inline-flex items-center justify-center w-10 h-10 rounded-full
+                           bg-amber-800 text-amber-50
+                           text-lg font-black shadow-md">
+                <%= current_value %>
+              </span>
+            </div>
+          </div>
+
+          <div class="relative">
+            <%= f.range_field field,
+                  min: 1,
+                  max: 5,
+                  step: 1,
+                  value: current_value,
+                  class: "w-full h-3 rounded-full appearance-none cursor-pointer
+                         bg-amber-200
+                         [&::-webkit-slider-thumb]:appearance-none
+                         [&::-webkit-slider-thumb]:w-7
+                         [&::-webkit-slider-thumb]:h-7
+                         [&::-webkit-slider-thumb]:rounded-full
+                         [&::-webkit-slider-thumb]:bg-white
+                         [&::-webkit-slider-thumb]:border-4
+                         [&::-webkit-slider-thumb]:border-amber-700
+                         [&::-webkit-slider-thumb]:shadow-lg
+                         [&::-webkit-slider-thumb]:transition-transform
+                         [&::-webkit-slider-thumb]:duration-200
+                         [&::-webkit-slider-thumb]:hover:scale-125
+                         [&::-moz-range-thumb]:w-7
+                         [&::-moz-range-thumb]:h-7
+                         [&::-moz-range-thumb]:rounded-full
+                         [&::-moz-range-thumb]:bg-white
+                         [&::-moz-range-thumb]:border-4
+                         [&::-moz-range-thumb]:border-amber-700
+                         [&::-moz-range-thumb]:shadow-lg",
+                  oninput: "
+                    document.getElementById('#{field}_value').innerText = this.value;
+                    var emojis = #{emojis.to_json};
+                    document.getElementById('#{field}_emoji').innerText = emojis[this.value - 1];
+                    document.getElementById('#{field}_emoji').style.transform = 'scale(1.4)';
+                    setTimeout(function(){ document.getElementById('#{field}_emoji').style.transform = 'scale(1)'; }, 200);
+                  " %>
+            <div class="flex justify-between mt-1 px-1">
+              <% (1..5).each do |n| %>
+                <span class="text-xs text-amber-700 font-medium"><%= n %></span>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+      <% end %>
+    </div>
+
+    <!-- 総合評価カード -->
+    <% overall_value = @review.overall_score || 5 %>
+
+    <div class="bg-amber-800 rounded-2xl shadow-2xl p-1">
+      <div class="bg-white rounded-xl p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-amber-800 text-xl shadow-md">🏆</span>
+            <label class="text-xl font-black text-stone-800">総合評価</label>
+          </div>
+          <div class="flex items-baseline gap-1">
+            <span id="overall_score_value"
+                  class="text-4xl font-black text-amber-800">
+              <%= overall_value %>
+            </span>
+            <span class="text-amber-700 font-bold text-lg">/ 10</span>
+          </div>
+        </div>
+
+        <!-- 数値インジケータードット -->
+        <div class="flex justify-center gap-1.5 mb-4" id="overall_dots">
+          <% (1..10).each do |n| %>
+            <div class="w-5 h-5 rounded-full transition-all duration-300 flex items-center justify-center text-[10px] font-bold
+                        <%= n <= overall_value ? 'bg-amber-50 text-stone-900 border-2 border-stone-900 scale-110 shadow-sm' : 'bg-amber-200 text-amber-900 border border-amber-400' %>"
+                 id="overall_dot_<%= n %>">
+              <%= n %>
+            </div>
+          <% end %>
+        </div>
+
+        <%= f.range_field :overall_score,
+              min: 1,
+              max: 10,
+              step: 1,
+              value: overall_value,
+              class: "w-full h-4 rounded-full appearance-none cursor-pointer
+                     bg-amber-200
+                     [&::-webkit-slider-thumb]:appearance-none
+                     [&::-webkit-slider-thumb]:w-8
+                     [&::-webkit-slider-thumb]:h-8
+                     [&::-webkit-slider-thumb]:rounded-full
+                     [&::-webkit-slider-thumb]:bg-white
+                     [&::-webkit-slider-thumb]:border-4
+                     [&::-webkit-slider-thumb]:border-stone-800
+                     [&::-webkit-slider-thumb]:shadow-lg
+                     [&::-webkit-slider-thumb]:transition-transform
+                     [&::-webkit-slider-thumb]:duration-200
+                     [&::-webkit-slider-thumb]:hover:scale-125
+                     [&::-moz-range-thumb]:w-8
+                     [&::-moz-range-thumb]:h-8
+                     [&::-moz-range-thumb]:rounded-full
+                     [&::-moz-range-thumb]:bg-white
+                     [&::-moz-range-thumb]:border-4
+                     [&::-moz-range-thumb]:border-stone-800
+                     [&::-moz-range-thumb]:shadow-lg",
+              oninput: "
+                var v = parseInt(this.value);
+                document.getElementById('overall_score_value').innerText = v;
+                for (var i = 1; i <= 10; i++) {
+                  var dot = document.getElementById('overall_dot_' + i);
+                  if (i <= v) {
+                    dot.className = 'w-5 h-5 rounded-full transition-all duration-300 flex items-center justify-center text-[10px] font-bold bg-amber-50 text-stone-900 border-2 border-stone-900 scale-110 shadow-sm';
+                  } else {
+                    dot.className = 'w-5 h-5 rounded-full transition-all duration-300 flex items-center justify-center text-[10px] font-bold bg-amber-200 text-amber-900 border border-amber-400';
+                  }
+                }
+              " %>
+        <div class="flex justify-between mt-1 px-1">
+          <span class="text-xs text-amber-700 font-medium">低い</span>
+          <span class="text-xs text-amber-700 font-medium">高い</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- コメントカード -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 border border-stone-200">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-lg">💬</span>
+        <%= f.label :comment, "レビューコメント", class: "text-lg font-bold text-stone-800" %>
+      </div>
+      <%= f.text_area :comment,
+            rows: 5,
+            placeholder: "お店の感想を自由に書いてください...",
+            class: "w-full rounded-xl border-2 border-stone-300 px-4 py-3 text-stone-700
+                    placeholder-amber-700/50 resize-none
+                    focus:border-amber-700 focus:ring-4 focus:ring-amber-200 focus:outline-none
+                    transition-all duration-200 bg-stone-50/30" %>
+    </div>
+
+    <!-- 送信ボタン -->
+    <div class="pt-2">
+      <%= f.submit "🥙 レビューを投稿する",
+            class: "w-full py-4 rounded-2xl text-lg font-black tracking-wide
+                   text-amber-900 bg-amber-100 border-2 border-amber-800
+                   shadow-xl shadow-amber-900/30
+                   hover:text-white hover:bg-amber-800 hover:border-amber-900
+                   hover:shadow-2xl hover:shadow-amber-900/50
+                   hover:-translate-y-0.5
+                   active:translate-y-0 active:shadow-lg
+                   transition-all duration-300 cursor-pointer" %>
+    </div>
+
+    <!-- 戻るリンク -->
+    <div class="text-center">
+      <%= link_to @shop, class: "inline-flex items-center gap-1 text-sm text-amber-800 hover:text-amber-900 transition-colors font-medium" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        店舗ページに戻る
+      <% end %>
+    </div>
+
+  <% end %>
+</div>

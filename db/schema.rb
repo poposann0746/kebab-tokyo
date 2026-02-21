@@ -10,9 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_15_103205) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_21_061540) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "reviews", force: :cascade do |t|
+    t.integer "bread_compatibility"
+    t.integer "category"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.integer "meat_taste"
+    t.integer "meat_type"
+    t.integer "overall_score", null: false
+    t.integer "sauce_taste"
+    t.integer "sauce_type"
+    t.bigint "shop_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.integer "value_for_money"
+    t.integer "vegetable_amount"
+    t.index ["shop_id"], name: "index_reviews_on_shop_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
+  end
 
   create_table "shops", force: :cascade do |t|
     t.string "address"
@@ -37,4 +56,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_15_103205) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "reviews", "shops"
+  add_foreign_key "reviews", "users"
 end

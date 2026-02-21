@@ -1,4 +1,153 @@
-<div>
-  <h1 class="font-bold text-4xl">Shops#show</h1>
-  <p>Find me in app/views/shops/show.html.erb</p>
+<div class="min-h-screen bg-amber-50 -mt-4 pb-12">
+
+  <!-- ヒーローヘッダー -->
+  <div class="relative overflow-hidden bg-stone-900 px-6 py-10 text-amber-50 text-center shadow-2xl">
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.08%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-30"></div>
+    <div class="relative">
+      <p class="text-5xl mb-3">🥙</p>
+      <h1 class="text-3xl font-black tracking-tight"><%= @shop.name %></h1>
+      <% if @shop.address.present? %>
+        <p class="mt-2 text-amber-200 text-sm font-medium flex items-center justify-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <%= @shop.address %>
+        </p>
+      <% end %>
+      <% if @shop.reviews.any? %>
+        <div class="mt-4 inline-flex items-center gap-2 bg-amber-800 rounded-full px-4 py-1.5">
+          <span class="text-lg">🏆</span>
+          <span class="font-black text-lg text-amber-50">
+            <%= (@shop.reviews.average(:overall_score) || 0).round(1) %>
+          </span>
+          <span class="text-amber-200 text-sm">/ 10</span>
+          <span class="text-amber-300 text-xs">(<%=  @shop.reviews.count %>件)</span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-lg px-4 -mt-6 relative z-10 space-y-6 pb-6">
+
+    <!-- レビューを書くボタン -->
+    <div>
+      <%= link_to new_shop_review_path(@shop),
+            class: "w-full py-4 rounded-2xl text-lg font-black tracking-wide flex items-center justify-center gap-2
+                   text-amber-900 bg-amber-100 border-2 border-amber-800
+                   shadow-xl shadow-amber-900/30
+                   hover:text-white hover:bg-amber-800 hover:border-amber-900
+                   hover:shadow-2xl hover:shadow-amber-900/50
+                   hover:-translate-y-0.5
+                   active:translate-y-0 active:shadow-lg
+                   transition-all duration-300" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+        レビューを書く
+      <% end %>
+    </div>
+
+    <!-- レビュー一覧ヘッダー -->
+    <div class="flex items-center gap-2">
+      <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-lg">💬</span>
+      <h2 class="text-lg font-bold text-stone-800">レビュー一覧</h2>
+      <span class="text-sm text-amber-700 font-medium">(<%= @shop.reviews.count %>件)</span>
+    </div>
+
+    <!-- レビューがない場合 -->
+    <% if @shop.reviews.empty? %>
+      <div class="bg-white rounded-2xl shadow-lg p-8 border border-stone-200 text-center">
+        <p class="text-4xl mb-3">📝</p>
+        <p class="text-stone-700 font-medium">まだレビューがありません</p>
+        <p class="text-amber-700 text-sm mt-1">最初のレビューを投稿してみましょう!</p>
+      </div>
+    <% end %>
+
+    <!-- レビューカード -->
+    <% @shop.reviews.order(created_at: :desc).each do |review| %>
+      <div class="bg-white rounded-2xl shadow-lg border border-stone-200 overflow-hidden">
+
+        <!-- カードヘッダー: ユーザー情報 + 総合評価 -->
+        <div class="flex items-center justify-between px-5 py-4 border-b border-stone-100">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-stone-900 text-amber-50 text-sm font-black">
+              <%= review.user.email.first.upcase %>
+            </span>
+            <div>
+              <p class="text-sm font-bold text-stone-800"><%= review.user.email.split('@').first %></p>
+              <p class="text-xs text-amber-700"><%= review.created_at.strftime("%Y/%m/%d") %></p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="text-lg">🏆</span>
+            <span class="text-2xl font-black text-amber-800"><%= review.overall_score %></span>
+            <span class="text-amber-700 text-sm font-bold">/ 10</span>
+          </div>
+        </div>
+
+        <div class="px-5 py-4 space-y-4">
+
+          <!-- カテゴリバッジ -->
+          <% if review.category.present? %>
+            <div>
+              <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 border border-amber-400 text-amber-900 text-xs font-bold">
+                🥙 <%= review.category.humanize %>
+              </span>
+            </div>
+          <% end %>
+
+          <!-- 5段階評価グリッド -->
+          <% ratings = [
+            ["🥩", "肉の味",      review.meat_taste],
+            ["🫙", "ソース",      review.sauce_taste],
+            ["🥬", "野菜の量",    review.vegetable_amount],
+            ["🫓", "パン相性",    review.bread_compatibility],
+            ["💰", "価格満足度",  review.value_for_money]
+          ].select { |_, _, v| v.present? } %>
+
+          <% if ratings.any? %>
+            <div class="grid grid-cols-2 gap-2">
+              <% ratings.each do |icon, label, value| %>
+                <div class="flex items-center justify-between bg-amber-50 rounded-xl px-3 py-2 border border-amber-200">
+                  <span class="flex items-center gap-1 text-stone-700 text-sm font-medium">
+                    <span><%= icon %></span>
+                    <span><%= label %></span>
+                  </span>
+                  <div class="flex items-center gap-1">
+                    <% (1..5).each do |n| %>
+                      <span class="w-2.5 h-2.5 rounded-full <%= n <= value ? 'bg-stone-900 border border-stone-900' : 'bg-amber-200 border border-amber-400' %>"></span>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+
+          <!-- 総合評価バー -->
+          <div class="bg-amber-50 rounded-xl px-4 py-3 border border-amber-200">
+            <div class="flex items-center justify-between mb-2">
+              <span class="flex items-center gap-1 text-sm font-bold text-stone-800">
+                <span>🏆</span>
+                <span>総合評価</span>
+              </span>
+              <span class="text-xl font-black text-amber-800"><%= review.overall_score %><span class="text-sm text-amber-700 font-bold"> / 10</span></span>
+            </div>
+            <div class="w-full bg-amber-200 rounded-full h-3 border border-amber-300">
+              <div class="bg-stone-900 h-full rounded-full" style="width: <%= review.overall_score * 10 %>%"></div>
+            </div>
+          </div>
+
+          <!-- コメント -->
+          <% if review.comment.present? %>
+            <div class="bg-amber-50 rounded-xl px-4 py-3 border border-amber-200">
+              <p class="text-stone-700 text-sm leading-relaxed"><%= review.comment %></p>
+            </div>
+          <% end %>
+
+        </div>
+      </div>
+    <% end %>
+
+  </div>
 </div>
