@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  shop: one
+  category: 1
+  meat_type: 1
+  sauce_type: 1
+  meat_taste: 1
+  sauce_taste: 1
+  vegetable_amount: 1
+  bread_compatibility: 1
+  value_for_money: 1
+  overall_score: 1
+  comment: MyText
+
+two:
+  user: two
+  shop: two
+  category: 1
+  meat_type: 1
+  sauce_type: 1
+  meat_taste: 1
+  sauce_taste: 1
+  vegetable_amount: 1
+  bread_compatibility: 1
+  value_for_money: 1
+  overall_score: 1
+  comment: MyText
