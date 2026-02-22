@@ -34,7 +34,8 @@ class ReviewsController < ApplicationController
       :bread_compatibility,
       :value_for_money,
       :overall_score,
-      :comment
+      :comment,
+      images: []
     )
   end
 end

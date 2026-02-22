@@ -2,6 +2,8 @@ class Review < ApplicationRecord
   belongs_to :user
   belongs_to :shop
 
+  has_many_attached :images
+
   enum :category, {
     kebab_sand: 0,
     kebab_wrap: 1,
@@ -29,4 +31,26 @@ class Review < ApplicationRecord
 
   validates :overall_score, presence: true
   validates :overall_score, inclusion: { in: 1..10 }
+
+  validate :validate_images
+
+  private
+
+  def validate_images
+    return unless images.attached?
+
+    if images.count > 3
+      errors.add(:images, "は最大3枚までです")
+    end
+
+    images.each do |image|
+      unless image.content_type.in?(%w[image/jpeg image/png image/webp])
+        errors.add(:images, "はJPEG、PNG、WebP形式のみ対応しています")
+      end
+
+      if image.blob.byte_size > 5.megabytes
+        errors.add(:images, "は1枚あたり5MB以下にしてください")
+      end
+    end
+  end
 end
