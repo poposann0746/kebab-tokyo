@@ -1,0 +1,62 @@
+<div class="min-h-screen bg-amber-50 -mt-4 pb-24">
+
+  <!-- ヒーローヘッダー -->
+  <div class="relative overflow-hidden bg-stone-900 px-6 py-10 text-amber-50 text-center shadow-2xl">
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.08%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-30"></div>
+    <div class="relative">
+      <p class="text-5xl mb-3">🥙</p>
+      <h1 class="text-3xl font-black tracking-tight">レビューする店舗を選ぶ</h1>
+      <p class="mt-2 text-amber-200 text-sm font-medium">エリアから店舗を探してレビューを投稿しよう</p>
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-lg px-4 -mt-6 relative z-10 space-y-6 pb-6">
+
+    <% if @shops_by_area.any? %>
+      <% @shops_by_area.each do |area, shops| %>
+        <!-- エリアセクション -->
+        <div class="bg-white rounded-2xl shadow-lg border border-stone-200 overflow-hidden">
+          <div class="flex items-center gap-2 px-5 py-4 border-b border-stone-100">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-lg">📍</span>
+            <h2 class="text-lg font-bold text-stone-800"><%= area %></h2>
+            <span class="text-sm text-amber-700 font-medium">(<%= shops.size %>件)</span>
+          </div>
+
+          <div class="divide-y divide-stone-100">
+            <% shops.each do |shop| %>
+              <%= link_to new_shop_review_path(shop),
+                    class: "block hover:bg-amber-50 transition-colors duration-200" do %>
+                <div class="flex items-center gap-4 px-5 py-4">
+                  <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-stone-900 text-amber-50 text-xl shrink-0">
+                    🥙
+                  </span>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-base font-bold text-stone-800 truncate"><%= shop.name %></p>
+                    <% if shop.address.present? %>
+                      <p class="text-xs text-amber-700 mt-1 truncate flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <%= shop.address %>
+                      </p>
+                    <% end %>
+                  </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="bg-white rounded-2xl shadow-lg p-8 border border-stone-200 text-center">
+        <p class="text-4xl mb-3">🔍</p>
+        <p class="text-stone-700 font-medium">店舗が見つかりません</p>
+      </div>
+    <% end %>
+
+  </div>
+</div>

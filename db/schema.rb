@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_21_061540) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_22_063737) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -35,6 +35,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_21_061540) do
 
   create_table "shops", force: :cascade do |t|
     t.string "address"
+    t.string "area"
     t.datetime "created_at", null: false
     t.string "image_url1"
     t.string "image_url2"
@@ -43,6 +44,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_21_061540) do
     t.float "lng"
     t.string "name"
     t.datetime "updated_at", null: false
+    t.index ["area"], name: "index_shops_on_area"
   end
 
   create_table "users", force: :cascade do |t|

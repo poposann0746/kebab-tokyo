@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   root "home#index"
 
   resources :shops, only: [ :index, :show ] do
+    collection do
+      get :select
+    end
     resources :reviews, only: [ :new, :create ]
   end
 end

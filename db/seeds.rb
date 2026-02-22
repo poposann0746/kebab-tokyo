@@ -20,7 +20,8 @@ count_before = Shop.count
 CSV.foreach(csv_path, headers: true) do |row|
   attrs = row.to_h.slice(
     "name", "address", "lat", "lng",
-    "image_url1", "image_url2", "image_url3"
+    "image_url1", "image_url2", "image_url3",
+    "area"
   )
 
   # CSVは文字列なので、数値カラムは変換（空ならnil）
