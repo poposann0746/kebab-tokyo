@@ -138,6 +138,17 @@
             </div>
           </div>
 
+          <!-- レビュー画像 -->
+          <% if review.images.attached? %>
+            <div class="grid grid-cols-3 gap-2">
+              <% review.images.each do |image| %>
+                <div class="aspect-square rounded-xl overflow-hidden border-2 border-amber-200 shadow-sm">
+                  <%= image_tag image, class: "w-full h-full object-cover" %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+
           <!-- コメント -->
           <% if review.comment.present? %>
             <div class="bg-amber-50 rounded-xl px-4 py-3 border border-amber-200">

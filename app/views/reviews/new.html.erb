@@ -266,6 +266,60 @@
       </div>
     </div>
 
+    <!-- 画像アップロードカード -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 border border-stone-200">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-lg">📸</span>
+        <span class="text-lg font-bold text-stone-800">写真を追加</span>
+      </div>
+      <div class="relative">
+        <%= f.file_field :images,
+              multiple: true,
+              accept: "image/jpeg,image/png,image/webp",
+              id: "review_images",
+              class: "block w-full text-sm text-stone-700
+                     file:mr-4 file:py-2.5 file:px-4
+                     file:rounded-full file:border-2 file:border-amber-300
+                     file:text-sm file:font-bold
+                     file:bg-amber-50 file:text-amber-900
+                     file:cursor-pointer
+                     hover:file:bg-amber-100
+                     file:transition-all file:duration-200",
+              onchange: "
+                var container = document.getElementById('image_preview_container');
+                container.innerHTML = '';
+                var files = this.files;
+                if (files.length > 3) {
+                  alert('画像は最大3枚までです');
+                  this.value = '';
+                  return;
+                }
+                for (var i = 0; i < files.length; i++) {
+                  var file = files[i];
+                  if (file.size > 5 * 1024 * 1024) {
+                    alert(file.name + ' は5MBを超えています');
+                    this.value = '';
+                    container.innerHTML = '';
+                    return;
+                  }
+                  var reader = new FileReader();
+                  reader.onload = function(e) {
+                    var div = document.createElement('div');
+                    div.className = 'relative w-24 h-24 rounded-xl overflow-hidden border-2 border-amber-200 shadow-sm';
+                    var img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-full h-full object-cover';
+                    div.appendChild(img);
+                    container.appendChild(div);
+                  };
+                  reader.readAsDataURL(file);
+                }
+              " %>
+      </div>
+      <div id="image_preview_container" class="flex gap-3 mt-4 flex-wrap"></div>
+      <p class="mt-3 text-xs text-amber-700">最大3枚まで / JPEG, PNG, WebP / 1枚あたり5MB以下</p>
+    </div>
+
     <!-- コメントカード -->
     <div class="bg-white rounded-2xl shadow-lg p-6 border border-stone-200">
       <div class="flex items-center gap-2 mb-4">
