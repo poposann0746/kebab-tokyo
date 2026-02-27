@@ -40,3 +40,59 @@ end
 
 count_after = Shop.count
 puts "Done. Shops: #{count_before} -> #{count_after}"
+
+# ── レビューのシードデータ ──
+puts "Seeding reviews..."
+
+# テスト用ユーザーを作成（既存なら再利用）
+test_users = 5.times.map do |i|
+  User.find_or_create_by!(email: "test#{i + 1}@example.com") do |u|
+    u.password = "password123"
+  end
+end
+
+categories = Review.categories.keys
+meat_types = Review.meat_types.keys
+sauce_types = Review.sauce_types.keys
+
+comments = [
+  "肉がジューシーで最高でした！",
+  "ソースの辛さがちょうどいい。リピ確定。",
+  "野菜たっぷりでヘルシー感あり。",
+  "コスパ良し。ランチにぴったり。",
+  "パンがモチモチで美味しかった。",
+  "ボリューム満点！お腹いっぱいになります。",
+  "スパイシーで本格的な味わい。",
+  "友達にもおすすめしたい一品。",
+  "深夜に食べるケバブは格別。",
+  "チキンとビーフのミックスが一番好き。"
+]
+
+review_count_before = Review.count
+
+Shop.find_each do |shop|
+  10.times do |i|
+    user = test_users[i % test_users.size]
+
+    # 同一ユーザー・同一店舗で重複作成を防止
+    next if Review.exists?(user: user, shop: shop, comment: comments[i])
+
+    Review.create!(
+      user: user,
+      shop: shop,
+      category: categories.sample,
+      meat_type: meat_types.sample,
+      sauce_type: sauce_types.sample,
+      overall_score: rand(1..10),
+      meat_taste: rand(1..10),
+      sauce_taste: rand(1..10),
+      vegetable_amount: rand(1..10),
+      bread_compatibility: rand(1..10),
+      value_for_money: rand(1..10),
+      comment: comments[i]
+    )
+  end
+end
+
+review_count_after = Review.count
+puts "Done. Reviews: #{review_count_before} -> #{review_count_after}"
