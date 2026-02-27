@@ -1,7 +1,158 @@
-<% if user_signed_in? %>
-  <p>ログイン中: <%= current_user.email %></p>
-  <%= button_to "ログアウト", destroy_user_session_path, method: :delete %>
-<% else %>
-  <%= link_to "ログイン", new_user_session_path %>
-  <%= link_to "新規登録", new_user_registration_path %>
-<% end %>
+<div class="min-h-screen bg-amber-50 -mt-4 pb-12">
+
+  <!-- ヒーロースライダー -->
+  <div id="hero-slider" class="relative overflow-hidden shadow-2xl">
+    <!-- スライド群 -->
+    <div id="hero-slides" class="flex transition-transform duration-700 ease-in-out">
+
+      <!-- スライド1 -->
+      <div class="w-full shrink-0 relative bg-stone-900 px-6 py-12 text-amber-50 text-center">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.08%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-30"></div>
+        <div class="relative">
+          <p class="text-5xl mb-3">🥙</p>
+          <h2 class="text-2xl font-black tracking-tight">東京のケバブを見つけよう</h2>
+          <p class="mt-2 text-amber-200 text-sm font-medium">みんなのレビューからお気に入りの一本を</p>
+        </div>
+      </div>
+
+      <!-- スライド2 -->
+      <div class="w-full shrink-0 relative bg-amber-800 px-6 py-12 text-amber-50 text-center">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.08%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-30"></div>
+        <div class="relative">
+          <p class="text-5xl mb-3">🥩</p>
+          <h2 class="text-2xl font-black tracking-tight">肉の味を評価しよう</h2>
+          <p class="mt-2 text-amber-200 text-sm font-medium">ビーフ・チキン・ミックス、あなたの推しは？</p>
+        </div>
+      </div>
+
+      <!-- スライド3 -->
+      <div class="w-full shrink-0 relative bg-orange-700 px-6 py-12 text-amber-50 text-center">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.08%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-30"></div>
+        <div class="relative">
+          <p class="text-5xl mb-3">📍</p>
+          <h2 class="text-2xl font-black tracking-tight">エリアから探す</h2>
+          <p class="mt-2 text-amber-200 text-sm font-medium">新宿・渋谷・秋葉原...お近くのケバブ店</p>
+        </div>
+      </div>
+
+      <!-- スライド4 -->
+      <div class="w-full shrink-0 relative bg-stone-800 px-6 py-12 text-amber-50 text-center">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.08%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-30"></div>
+        <div class="relative">
+          <p class="text-5xl mb-3">✍️</p>
+          <h2 class="text-2xl font-black tracking-tight">レビューを投稿しよう</h2>
+          <p class="mt-2 text-amber-200 text-sm font-medium">あなたの一言がケバブ好きの道しるべに</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- インジケーター -->
+    <div class="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-10">
+      <button class="hero-dot w-2.5 h-2.5 rounded-full bg-white/90 transition-all duration-300" data-slide="0"></button>
+      <button class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all duration-300" data-slide="1"></button>
+      <button class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all duration-300" data-slide="2"></button>
+      <button class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all duration-300" data-slide="3"></button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const slides = document.getElementById("hero-slides");
+      const dots = document.querySelectorAll(".hero-dot");
+      const totalSlides = dots.length;
+      let current = 0;
+      let timer;
+
+      function goTo(index) {
+        current = index % totalSlides;
+        slides.style.transform = "translateX(-" + (current * 100) + "%)";
+        dots.forEach(function(dot, i) {
+          dot.classList.toggle("bg-white/90", i === current);
+          dot.classList.toggle("bg-white/40", i !== current);
+        });
+      }
+
+      function startAutoPlay() {
+        timer = setInterval(function() { goTo(current + 1); }, 5000);
+      }
+
+      dots.forEach(function(dot) {
+        dot.addEventListener("click", function() {
+          clearInterval(timer);
+          goTo(parseInt(this.dataset.slide));
+          startAutoPlay();
+        });
+      });
+
+      startAutoPlay();
+    });
+  </script>
+
+  <div class="mx-auto max-w-screen-xl -mt-5 relative z-10 space-y-6 px-4 pb-6">
+
+    <%# あなたの投稿 %>
+    <% if user_signed_in? && @my_reviews.present? %>
+      <section>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-lg shadow-sm">📝</span>
+          <h2 class="text-lg font-bold text-stone-800">あなたの投稿</h2>
+          <span class="text-xs text-amber-700 font-medium">(<%= @my_reviews.size %>件)</span>
+        </div>
+        <div class="flex overflow-x-auto gap-4 pb-2 -mx-4 px-4 scrollbar-hide">
+          <% @my_reviews.each do |review| %>
+            <%= render "home/review_card", review: review %>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+
+    <%# おすすめ %>
+    <% if @recommended_reviews.present? %>
+      <section>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-lg shadow-sm">🏆</span>
+          <h2 class="text-lg font-bold text-stone-800">おすすめ</h2>
+        </div>
+        <div class="flex overflow-x-auto gap-4 pb-2 -mx-4 px-4 scrollbar-hide">
+          <% @recommended_reviews.each do |review| %>
+            <%= render "home/review_card", review: review %>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+
+    <%# 新宿 %>
+    <% if @shinjuku_reviews.present? %>
+      <section>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-lg shadow-sm">📍</span>
+          <h2 class="text-lg font-bold text-stone-800">新宿</h2>
+          <span class="text-xs text-amber-700 font-medium">(<%= @shinjuku_reviews.size %>件)</span>
+        </div>
+        <div class="flex overflow-x-auto gap-4 pb-2 -mx-4 px-4 scrollbar-hide">
+          <% @shinjuku_reviews.each do |review| %>
+            <%= render "home/review_card", review: review %>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+
+    <%# 渋谷 %>
+    <% if @shibuya_reviews.present? %>
+      <section>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-lg shadow-sm">📍</span>
+          <h2 class="text-lg font-bold text-stone-800">渋谷</h2>
+          <span class="text-xs text-amber-700 font-medium">(<%= @shibuya_reviews.size %>件)</span>
+        </div>
+        <div class="flex overflow-x-auto gap-4 pb-2 -mx-4 px-4 scrollbar-hide">
+          <% @shibuya_reviews.each do |review| %>
+            <%= render "home/review_card", review: review %>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+
+  </div>
+</div>
