@@ -124,6 +124,65 @@
             </div>
           <% end %>
 
+          <!-- レーダーチャート -->
+          <% radar_values = [review.meat_taste, review.sauce_taste, review.vegetable_amount, review.bread_compatibility, review.value_for_money] %>
+          <% if radar_values.any?(&:present?) %>
+            <div class="flex justify-center">
+              <div class="w-full" style="max-width: 280px;">
+                <canvas id="radar-chart-<%= review.id %>"></canvas>
+              </div>
+            </div>
+            <script>
+              document.addEventListener("DOMContentLoaded", function() {
+                new Chart(document.getElementById("radar-chart-<%= review.id %>"), {
+                  type: "radar",
+                  data: {
+                    labels: ["肉の味", "ソース", "野菜の量", "パン相性", "価格満足度"],
+                    datasets: [{
+                      data: [<%= radar_values.map { |v| v || 0 }.join(", ") %>],
+                      backgroundColor: "rgba(245, 158, 11, 0.3)",
+                      borderColor: "rgba(194, 65, 12, 0.9)",
+                      borderWidth: 2.5,
+                      pointBackgroundColor: "rgba(194, 65, 12, 1)",
+                      pointBorderColor: "#fff",
+                      pointBorderWidth: 1,
+                      pointRadius: 4,
+                      fill: true
+                    }]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                      r: {
+                        min: 0,
+                        max: 5,
+                        ticks: {
+                          stepSize: 1,
+                          display: false
+                        },
+                        grid: {
+                          color: "rgba(217, 119, 6, 0.3)",
+                          lineWidth: 1.5,
+                          circular: false
+                        },
+                        angleLines: {
+                          color: "rgba(217, 119, 6, 0.3)",
+                          lineWidth: 1.5
+                        },
+                        pointLabels: {
+                          font: { size: 12, weight: "bold" },
+                          color: "#44403c"
+                        }
+                      }
+                    }
+                  }
+                });
+              });
+            </script>
+          <% end %>
+
           <!-- 総合評価バー -->
           <div class="bg-amber-50 rounded-xl px-4 py-3 border border-amber-200">
             <div class="flex items-center justify-between mb-2">
