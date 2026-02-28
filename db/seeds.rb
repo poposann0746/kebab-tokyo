@@ -84,11 +84,11 @@ Shop.find_each do |shop|
       meat_type: meat_types.sample,
       sauce_type: sauce_types.sample,
       overall_score: rand(1..10),
-      meat_taste: rand(1..10),
-      sauce_taste: rand(1..10),
-      vegetable_amount: rand(1..10),
-      bread_compatibility: rand(1..10),
-      value_for_money: rand(1..10),
+      meat_taste: rand(1..5),
+      sauce_taste: rand(1..5),
+      vegetable_amount: rand(1..5),
+      bread_compatibility: rand(1..5),
+      value_for_money: rand(1..5),
       comment: comments[i]
     )
   end
