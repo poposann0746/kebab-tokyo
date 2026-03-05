@@ -1,0 +1,47 @@
+<% flash.each do |type, message| %>
+  <% next if message.blank? %>
+  <% is_notice = (type.to_s == "notice") %>
+  <div data-turbo-temporary
+       class="fixed top-20 left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-2rem)] max-w-md flash-message"
+       style="opacity: 0; transform: translate(-50%, -8px);">
+    <div class="<%= is_notice ? 'bg-amber-50 border-amber-400 text-amber-900' : 'bg-red-50 border-red-400 text-red-900' %> border-2 rounded-xl px-4 py-3 shadow-lg flex items-start gap-3">
+      <% if is_notice %>
+        <svg class="w-5 h-5 text-amber-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+      <% else %>
+        <svg class="w-5 h-5 text-red-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      <% end %>
+      <p class="text-sm font-medium flex-1"><%= message %></p>
+      <button onclick="this.closest('.flash-message').remove();" class="<%= is_notice ? 'text-amber-400 hover:text-amber-600' : 'text-red-400 hover:text-red-600' %> shrink-0" aria-label="閉じる">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  function animateFlashMessages() {
+    document.querySelectorAll('.flash-message').forEach(function(el) {
+      requestAnimationFrame(function() {
+        el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        el.style.opacity = '1';
+        el.style.transform = 'translate(-50%, 0)';
+      });
+
+      setTimeout(function() {
+        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        el.style.opacity = '0';
+        el.style.transform = 'translate(-50%, -8px)';
+        setTimeout(function() { el.remove(); }, 500);
+      }, 5000);
+    });
+  }
+
+  animateFlashMessages();
+  document.addEventListener('turbo:load', animateFlashMessages);
+</script>
