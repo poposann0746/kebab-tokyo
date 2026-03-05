@@ -1,25 +1,86 @@
-<%- if controller_name != 'sessions' %>
-  <p><%= link_to "ログイン", new_session_path(resource_name) %></p>
-<% end %>
-
-<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-  <p><%= link_to "新規登録", new_registration_path(resource_name) %></p>
-<% end %>
-
-<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <p><%= link_to "パスワードをお忘れですか？", new_password_path(resource_name) %></p>
-<% end %>
-
-<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-  <p><%= link_to "確認メールが届きませんか？", new_confirmation_path(resource_name) %></p>
-<% end %>
-
-<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
-  <p><%= link_to "ロック解除メールが届きませんか？", new_unlock_path(resource_name) %></p>
-<% end %>
-
-<%- if devise_mapping.omniauthable? %>
-  <%- resource_class.omniauth_providers.each do |provider| %>
-    <p><%= button_to "#{OmniAuth::Utils.camelize(provider)}でログイン", omniauth_authorize_path(resource_name, provider), data: { turbo: false } %></p>
+<div class="bg-white rounded-2xl shadow-lg border border-stone-200 overflow-hidden divide-y divide-stone-100">
+  <%- if controller_name != 'sessions' %>
+    <%= link_to new_session_path(resource_name),
+        class: "flex items-center gap-3 px-6 py-4 text-stone-700 hover:bg-amber-50 transition-colors" do %>
+      <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 shrink-0">
+        <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+        </svg>
+      </span>
+      <span class="text-sm font-bold">ログインはこちら</span>
+      <svg class="w-5 h-5 text-stone-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    <% end %>
   <% end %>
-<% end %>
+
+  <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <%= link_to new_registration_path(resource_name),
+        class: "flex items-center gap-3 px-6 py-4 text-stone-700 hover:bg-amber-50 transition-colors" do %>
+      <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 shrink-0">
+        <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+        </svg>
+      </span>
+      <span class="text-sm font-bold">新規登録はこちら</span>
+      <svg class="w-5 h-5 text-stone-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    <% end %>
+  <% end %>
+
+  <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+    <%= link_to new_password_path(resource_name),
+        class: "flex items-center gap-3 px-6 py-4 text-stone-700 hover:bg-amber-50 transition-colors" do %>
+      <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 shrink-0">
+        <svg class="w-4 h-4 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </span>
+      <span class="text-sm font-bold">パスワードをお忘れですか？</span>
+      <svg class="w-5 h-5 text-stone-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    <% end %>
+  <% end %>
+
+  <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+    <%= link_to new_confirmation_path(resource_name),
+        class: "flex items-center gap-3 px-6 py-4 text-stone-700 hover:bg-amber-50 transition-colors" do %>
+      <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 shrink-0">
+        <svg class="w-4 h-4 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+      </span>
+      <span class="text-sm font-bold">確認メールが届きませんか？</span>
+      <svg class="w-5 h-5 text-stone-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    <% end %>
+  <% end %>
+
+  <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
+    <%= link_to new_unlock_path(resource_name),
+        class: "flex items-center gap-3 px-6 py-4 text-stone-700 hover:bg-amber-50 transition-colors" do %>
+      <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 shrink-0">
+        <svg class="w-4 h-4 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+        </svg>
+      </span>
+      <span class="text-sm font-bold">ロック解除メールが届きませんか？</span>
+      <svg class="w-5 h-5 text-stone-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    <% end %>
+  <% end %>
+
+  <%- if devise_mapping.omniauthable? %>
+    <%- resource_class.omniauth_providers.each do |provider| %>
+      <div class="px-6 py-4">
+        <%= button_to "#{OmniAuth::Utils.camelize(provider)}でログイン", omniauth_authorize_path(resource_name, provider),
+            data: { turbo: false },
+            class: "w-full py-3 rounded-xl text-sm font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 transition-colors cursor-pointer" %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

@@ -68,3 +68,35 @@ GitHub Actions（`.github/workflows/ci.yml`）:
 - Tailwind CSSは`bin/dev`実行時に自動ビルド（Procfile.dev参照）
 - テストは並列実行有効（`parallelize(workers: :number_of_processors)`）
 - RuboCopはOmakaseスタイル（`.rubocop.yml`）
+
+## フロントエンドデザインガイドライン
+
+UIの変更・作成時は以下に従うこと。
+
+### デザイン方針
+
+- モバイルファースト
+- シンプル・モダン・視認性が高い
+- 一貫性のあるデザイン（全ページで統一パターンを使用）
+
+### 配色（ブランドカラー）
+
+- **メイン背景**: `bg-amber-50`
+- **ヒーローヘッダー**: `bg-stone-900`（SVGパターン背景 + 絵文字アイコン）
+- **カード**: `bg-white rounded-2xl shadow-lg border border-stone-200`
+- **テキスト**: `text-stone-800`（主要）、`text-amber-700`（補助）
+- **アクセント**: `amber-800` / `amber-100`（ボタン・バッジ）
+- **危険系**: `red-50` / `red-600`（削除・エラー）
+
+### 共通UIパターン
+
+- **ページ構造**: ヒーローヘッダー → `-mt-6` でカードをオーバーラップ → `max-w-lg` コンテンツ
+- **入力フィールド**: `px-4 py-3 rounded-xl border-2 border-stone-200 bg-amber-50 focus:border-amber-400`
+- **送信ボタン**: `rounded-2xl font-black text-amber-900 bg-amber-100 border-2 border-amber-800 hover:bg-amber-800 hover:text-white`
+- **リスト項目**: アイコン + テキスト + シェブロン（`M9 5l7 7-7 7`）、`hover:bg-amber-50`
+- **セクションヘッダー**: 絵文字（`rounded-full bg-amber-100`） + `font-bold text-stone-800`
+- **スコアバッジ**: `bg-stone-900/80 backdrop-blur-sm text-amber-50 rounded-full`
+
+### 改善対象
+
+ヘッダー、ナビゲーション、ボトムナビ、カードUI、ボタン、フォーム、一覧ページ、詳細ページ
