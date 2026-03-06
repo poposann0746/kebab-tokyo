@@ -72,10 +72,10 @@
         <div class="flex items-center justify-between px-5 py-4 border-b border-stone-100">
           <div class="flex items-center gap-2">
             <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-stone-900 text-amber-50 text-sm font-black">
-              <%= review.user.email.first.upcase %>
+              <%= review.user.display_name.first.upcase %>
             </span>
             <div>
-              <p class="text-sm font-bold text-stone-800"><%= review.user.email.split('@').first %></p>
+              <p class="text-sm font-bold text-stone-800"><%= review.user.display_name %></p>
               <p class="text-xs text-amber-700"><%= review.created_at.strftime("%Y/%m/%d") %></p>
             </div>
           </div>
