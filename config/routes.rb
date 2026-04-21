@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :shops, only: [ :index, :show ] do
     collection do
       get :select
+      get :map
     end
     resources :reviews, only: [ :new, :create ]
   end

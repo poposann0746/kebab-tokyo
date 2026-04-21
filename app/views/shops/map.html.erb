@@ -1,0 +1,170 @@
+<% content_for :head do %>
+  <script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__aw",d="__gmp",e=0,f="https://maps.googleapis.com/maps/api/js",n="(loading the Maps JS API)",r="e]##",t="__e3_",u="__gm",w;if(!((a=g.google)&&(k=a.maps)&&k[l])){h=document.createElement("script");a=document.head;h.onerror=function(){};h.nonce=document.querySelector("script[nonce]")?.nonce||"";h.src=f+"?"+new URLSearchParams(g).toString();a.insertBefore(h,a.firstChild)}})
+    ({key: "<%= @google_maps_api_key %>", v: "weekly"});
+  </script>
+  <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+<% end %>
+
+<div id="map-container"
+     data-shops="<%= @shops_json %>"
+     data-map-id="<%= @google_maps_map_id %>"
+     style="height: calc(100dvh - 128px); width: 100%;">
+</div>
+
+<script>
+(function() {
+  let mapInstance = null;
+  let initialized = false;
+
+  async function initMap() {
+    if (initialized) return;
+    initialized = true;
+
+    const container = document.getElementById("map-container");
+    if (!container) return;
+
+    const shops = JSON.parse(container.dataset.shops);
+
+    const { Map } = await google.maps.importLibrary("maps");
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+    const map = new Map(container, {
+      center: { lat: 35.6812, lng: 139.7671 },
+      zoom: 12,
+      mapId: container.dataset.mapId,
+      disableDefaultUI: false,
+      zoomControl: true,
+      streetViewControl: false,
+      fullscreenControl: false
+    });
+    mapInstance = map;
+
+    const infoWindow = new google.maps.InfoWindow();
+    const markers = [];
+    const bounds = new google.maps.LatLngBounds();
+
+    shops.forEach(function(shop) {
+      const position = { lat: parseFloat(shop.lat), lng: parseFloat(shop.lng) };
+      bounds.extend(position);
+
+      const markerEl = document.createElement("div");
+      markerEl.innerHTML = "🥙";
+      markerEl.style.fontSize = "28px";
+      markerEl.style.cursor = "pointer";
+
+      const marker = new AdvancedMarkerElement({
+        map: map,
+        position: position,
+        content: markerEl,
+        title: shop.name
+      });
+
+      marker.addListener("click", function() {
+        const scoreHtml = shop.avg_score
+          ? '<span style="background:#1c1917;color:#fffbeb;padding:2px 8px;border-radius:9999px;font-size:12px;font-weight:bold;">★ ' + shop.avg_score + '</span> <span style="color:#78716c;font-size:12px;">(' + shop.review_count + '件)</span>'
+          : '<span style="color:#78716c;font-size:12px;">レビューなし</span>';
+
+        const imageHtml = shop.image_url
+          ? '<img src="' + shop.image_url + '" style="width:100%;height:100px;object-fit:cover;border-radius:12px;margin-bottom:8px;" />'
+          : '';
+
+        infoWindow.setContent(
+          '<div style="min-width:200px;max-width:260px;font-family:system-ui,sans-serif;">' +
+            imageHtml +
+            '<div style="font-weight:bold;font-size:15px;color:#1c1917;margin-bottom:4px;">' + shop.name + '</div>' +
+            (shop.area ? '<div style="font-size:13px;color:#b45309;margin-bottom:6px;">📍 ' + shop.area + '</div>' : '') +
+            '<div style="margin-bottom:8px;">' + scoreHtml + '</div>' +
+            '<a href="/shops/' + shop.id + '" style="display:inline-block;padding:6px 16px;background:#fef3c7;color:#92400e;border:2px solid #92400e;border-radius:12px;font-size:13px;font-weight:bold;text-decoration:none;">詳細を見る</a>' +
+          '</div>'
+        );
+        infoWindow.open({ anchor: marker, map: map });
+      });
+
+      markers.push(marker);
+    });
+
+    if (shops.length > 0) {
+      map.fitBounds(bounds, { top: 50, bottom: 50, left: 20, right: 20 });
+    }
+
+    // MarkerClusterer
+    if (typeof markerClusterer !== "undefined" && markerClusterer.MarkerClusterer) {
+      new markerClusterer.MarkerClusterer({
+        map: map,
+        markers: markers,
+        renderer: {
+          render: function({ count, position }) {
+            const el = document.createElement("div");
+            el.style.cssText = "background:#1c1917;color:#fef3c7;border-radius:9999px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;border:2px solid #92400e;";
+            el.textContent = count;
+            return new AdvancedMarkerElement({ position: position, content: el });
+          }
+        }
+      });
+    }
+
+    // 現在地表示
+    if (navigator.geolocation) {
+      const locationBtn = document.createElement("button");
+      locationBtn.textContent = "📍 現在地";
+      locationBtn.style.cssText = "background:white;border:2px solid #d6d3d1;border-radius:12px;padding:6px 12px;font-size:13px;font-weight:bold;color:#1c1917;cursor:pointer;margin:10px;box-shadow:0 2px 6px rgba(0,0,0,0.15);";
+      locationBtn.addEventListener("mouseenter", function() { locationBtn.style.background = "#fef3c7"; });
+      locationBtn.addEventListener("mouseleave", function() { locationBtn.style.background = "white"; });
+
+      map.controls[google.maps.ControlPosition.RIGHT_TOP].push(locationBtn);
+
+      let userMarker = null;
+
+      function showCurrentLocation() {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          const userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+
+          if (userMarker) {
+            userMarker.position = userPos;
+          } else {
+            const dot = document.createElement("div");
+            dot.style.cssText = "width:16px;height:16px;background:#3b82f6;border:3px solid white;border-radius:50%;box-shadow:0 0 8px rgba(59,130,246,0.5);";
+            userMarker = new AdvancedMarkerElement({
+              map: map,
+              position: userPos,
+              content: dot,
+              title: "現在地"
+            });
+          }
+
+          map.panTo(userPos);
+          map.setZoom(14);
+        }, function() {
+          // 位置情報が取得できない場合は何もしない
+        });
+      }
+
+      locationBtn.addEventListener("click", showCurrentLocation);
+    }
+  }
+
+  // Turbo対応: turbo:load で初期化、離脱時にクリーンアップ
+  function handleLoad() {
+    if (document.getElementById("map-container")) {
+      initialized = false;
+      initMap();
+    }
+  }
+
+  function handleBeforeRender() {
+    initialized = false;
+    mapInstance = null;
+  }
+
+  document.addEventListener("turbo:load", handleLoad);
+  document.addEventListener("turbo:before-render", handleBeforeRender);
+
+  // 初回ロード（Turbo無効の場合のフォールバック）
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", handleLoad);
+  } else {
+    handleLoad();
+  }
+})();
+</script>
