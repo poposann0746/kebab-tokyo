@@ -1,0 +1,32 @@
+<footer class="bg-white
+
+ mt-12">
+  <div class="mx-auto max-w-screen-xl px-4 py-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <p class="text-xs text-stone-500 whitespace-nowrap">
+        &copy; <%= Date.current.year %> Kebab TOKYO
+      </p>
+
+      <nav aria-label="フッターナビゲーション">
+        <ul class="flex justify-start sm:justify-end gap-x-3 sm:gap-x-4">
+          <li>
+            <%= link_to "プライバシーポリシー", "#",
+                class: "text-[11px] sm:text-sm text-stone-600 hover:text-amber-700 transition-colors whitespace-nowrap" %>
+          </li>
+          <li>
+            <%= link_to "利用規約", "#",
+                class: "text-[11px] sm:text-sm text-stone-600 hover:text-amber-700 transition-colors whitespace-nowrap" %>
+          </li>
+          <li>
+            <%= link_to "使い方", "#",
+                class: "text-[11px] sm:text-sm text-stone-600 hover:text-amber-700 transition-colors whitespace-nowrap" %>
+          </li>
+          <li>
+            <%= link_to "お問い合わせ", "#",
+                class: "text-[11px] sm:text-sm text-stone-600 hover:text-amber-700 transition-colors whitespace-nowrap" %>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</footer>
