@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   get "up" => "rails/health#show", as: :rails_health_check
 
+  get "terms" => "pages#terms", as: :terms
+
   root "home#index"
 
   resources :shops, only: [ :index, :show ] do
