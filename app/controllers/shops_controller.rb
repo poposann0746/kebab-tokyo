@@ -10,7 +10,11 @@ class ShopsController < ApplicationController
   end
 
   def select
-    @shops_by_area = Shop.where.not(area: nil).order(:name).group_by(&:area)
+    @query = params[:q].to_s.strip
+    @shops_by_area = Shop.search(@query)
+                         .where.not(area: nil)
+                         .order(:name)
+                         .group_by(&:area)
   end
 
   def map
