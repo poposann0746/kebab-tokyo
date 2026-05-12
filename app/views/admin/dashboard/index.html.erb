@@ -1,0 +1,47 @@
+<% content_for :title, "ダッシュボード | 管理画面" %>
+
+<section class="bg-stone-900 text-amber-50 rounded-2xl shadow-lg p-6 mb-6">
+  <h1 class="text-2xl font-black flex items-center gap-2">
+    <span>📊</span><span>ダッシュボード</span>
+  </h1>
+  <p class="text-sm text-amber-100/80 mt-1">運用に必要な指標と導線をここに集約します。</p>
+</section>
+
+<section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+  <div class="bg-white rounded-2xl shadow-lg border border-stone-200 p-5">
+    <div class="text-sm font-bold text-stone-500 flex items-center gap-2">
+      <span>👥</span><span>ユーザー数</span>
+    </div>
+    <div class="mt-2 text-3xl font-black text-stone-800"><%= number_with_delimiter(@users_count) %></div>
+  </div>
+  <div class="bg-white rounded-2xl shadow-lg border border-stone-200 p-5">
+    <div class="text-sm font-bold text-stone-500 flex items-center gap-2">
+      <span>🏪</span><span>店舗数</span>
+    </div>
+    <div class="mt-2 text-3xl font-black text-stone-800"><%= number_with_delimiter(@shops_count) %></div>
+  </div>
+  <div class="bg-white rounded-2xl shadow-lg border border-stone-200 p-5">
+    <div class="text-sm font-bold text-stone-500 flex items-center gap-2">
+      <span>📝</span><span>レビュー数</span>
+    </div>
+    <div class="mt-2 text-3xl font-black text-stone-800"><%= number_with_delimiter(@reviews_count) %></div>
+  </div>
+</section>
+
+<section class="bg-white rounded-2xl shadow-lg border border-stone-200 p-5">
+  <h2 class="font-bold text-stone-800 flex items-center gap-2 mb-3">
+    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100">🔗</span>
+    <span>クイックリンク</span>
+  </h2>
+  <ul class="divide-y divide-stone-100">
+    <li>
+      <%= link_to admin_users_path, class: "flex items-center gap-3 px-2 py-3 hover:bg-amber-50 rounded-xl" do %>
+        <span>👥</span>
+        <span class="flex-1 font-bold text-stone-800">ユーザー一覧</span>
+        <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      <% end %>
+    </li>
+  </ul>
+</section>

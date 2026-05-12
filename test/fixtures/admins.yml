@@ -1,0 +1,5 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# Adminのテストデータは後続Issueでテストを追加するときに整備します。
+# 現状は空のままにし、自動生成された空のfixture（one: {} / two: {}）による
+# email重複エラーを回避します。

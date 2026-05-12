@@ -1,4 +1,22 @@
 Rails.application.routes.draw do
+  devise_for :admins, path: "admin", path_names: {
+    sign_in: "login", sign_out: "logout"
+  }, skip: [ :registrations ], controllers: {
+    sessions: "admins/sessions",
+    passwords: "admins/passwords"
+  }
+
+  namespace :admin do
+    root to: "dashboard#index"
+    get "dashboard", to: "dashboard#index"
+    resources :users, only: [ :index, :show ]
+    # 将来の拡張用（後続Issueで実装）
+    # resources :reports, only: [:index, :show, :update]
+    # resources :shops,   only: [:index, :show, :update, :destroy] do
+    #   collection { post :merge }
+    # end
+  end
+
   get "home/index"
   devise_for :users
 

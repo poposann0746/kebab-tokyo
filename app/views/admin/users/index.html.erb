@@ -1,0 +1,66 @@
+<% content_for :title, "ユーザー一覧 | 管理画面" %>
+
+<section class="bg-stone-900 text-amber-50 rounded-2xl shadow-lg p-6 mb-6">
+  <h1 class="text-2xl font-black flex items-center gap-2">
+    <span>👥</span><span>ユーザー一覧</span>
+  </h1>
+  <p class="text-sm text-amber-100/80 mt-1">登録順に表示しています（全 <%= number_with_delimiter(@total_count) %> 件）</p>
+</section>
+
+<section class="bg-white rounded-2xl shadow-lg border border-stone-200 overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-stone-50 text-stone-600">
+        <tr>
+          <th class="px-4 py-3 text-left font-bold">ID</th>
+          <th class="px-4 py-3 text-left font-bold">メール</th>
+          <th class="px-4 py-3 text-left font-bold">ニックネーム</th>
+          <th class="px-4 py-3 text-right font-bold">レビュー数</th>
+          <th class="px-4 py-3 text-left font-bold">登録日</th>
+          <th class="px-4 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-stone-100">
+        <% @users.each do |user| %>
+          <tr class="hover:bg-amber-50">
+            <td class="px-4 py-3 text-stone-500"><%= user.id %></td>
+            <td class="px-4 py-3 text-stone-800 font-medium"><%= user.email %></td>
+            <td class="px-4 py-3 text-stone-700"><%= user.display_name %></td>
+            <td class="px-4 py-3 text-right text-stone-800 font-bold"><%= user.reviews_count %></td>
+            <td class="px-4 py-3 text-stone-500"><%= l(user.created_at, format: :long) rescue user.created_at.strftime("%Y-%m-%d") %></td>
+            <td class="px-4 py-3 text-right">
+              <%= link_to "詳細",
+                    admin_user_path(user),
+                    class: "inline-flex items-center gap-1 text-amber-800 hover:text-amber-900 font-bold" %>
+            </td>
+          </tr>
+        <% end %>
+        <% if @users.empty? %>
+          <tr>
+            <td colspan="6" class="px-4 py-8 text-center text-stone-500">ユーザーがいません</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<% if @total_pages > 1 %>
+  <nav class="mt-4 flex items-center justify-between text-sm">
+    <% if @current_page > 1 %>
+      <%= link_to "← 前へ", admin_users_path(page: @current_page - 1),
+            class: "px-4 py-2 rounded-xl bg-white border border-stone-200 hover:bg-amber-50 font-bold text-stone-700" %>
+    <% else %>
+      <span></span>
+    <% end %>
+
+    <span class="text-stone-500"><%= @current_page %> / <%= @total_pages %></span>
+
+    <% if @current_page < @total_pages %>
+      <%= link_to "次へ →", admin_users_path(page: @current_page + 1),
+            class: "px-4 py-2 rounded-xl bg-white border border-stone-200 hover:bg-amber-50 font-bold text-stone-700" %>
+    <% else %>
+      <span></span>
+    <% end %>
+  </nav>
+<% end %>

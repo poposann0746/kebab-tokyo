@@ -96,3 +96,13 @@ end
 
 review_count_after = Review.count
 puts "Done. Reviews: #{review_count_before} -> #{review_count_after}"
+
+# ── 管理者ユーザーのシード ──
+if ENV["ADMIN_EMAIL"].present? && ENV["ADMIN_PASSWORD"].present?
+  admin = Admin.find_or_initialize_by(email: ENV["ADMIN_EMAIL"])
+  admin.password = ENV["ADMIN_PASSWORD"]
+  admin.save!
+  puts "Admin ensured: #{admin.email}"
+else
+  puts "Skip admin seed (set ADMIN_EMAIL and ADMIN_PASSWORD to create)"
+end
