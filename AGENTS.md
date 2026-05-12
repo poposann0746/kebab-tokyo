@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
 
 ## プロジェクト概要
 
@@ -100,16 +100,3 @@ UIの変更・作成時は以下に従うこと。
 ### 改善対象
 
 ヘッダー、ナビゲーション、ボトムナビ、カードUI、ボタン、フォーム、一覧ページ、詳細ページ
-
-## その他
-私は初学者なので、複雑すぎる実装や過度なリファクタリングは避けてください。
-なるべくRailsの基本的な書き方で、読みやすく実装してください。
-
-変更する前に、以下を出してください。
-
-1. 今回やること
-2. 変更するファイル一覧
-3. それぞれのファイルの役割
-4. 実装後に確認する画面・動作
-
-その後、実装してください。
